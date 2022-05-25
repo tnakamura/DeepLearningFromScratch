@@ -28,6 +28,8 @@ Console.WriteLine($"1\t0\t{XOR(1, 0)}");
 Console.WriteLine($"0\t1\t{XOR(0, 1)}");
 Console.WriteLine($"1\t1\t{XOR(1, 1)}");
 
+Console.ReadLine();
+
 static int AND(int x1, int x2)
 {
     var x = np.array<double>(x1, x2);
