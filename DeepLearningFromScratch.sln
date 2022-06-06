@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perceptron", "Perceptron\Pe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActivationFunctionSoftmax", "ActivationFunctionSoftmax\ActivationFunctionSoftmax.csproj", "{F7ACE4E9-C9B3-4D27-ADEC-7E75240B8B2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetwork", "NeuralNetwork\NeuralNetwork.csproj", "{6382EE3D-53DF-4B24-9175-19150526EA0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetwork", "NeuralNetwork\NeuralNetwork.csproj", "{6382EE3D-53DF-4B24-9175-19150526EA0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mnist", "Mnist\Mnist.csproj", "{FD584694-6742-40A5-AA6D-02AB738ED62C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{6382EE3D-53DF-4B24-9175-19150526EA0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6382EE3D-53DF-4B24-9175-19150526EA0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6382EE3D-53DF-4B24-9175-19150526EA0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD584694-6742-40A5-AA6D-02AB738ED62C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD584694-6742-40A5-AA6D-02AB738ED62C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD584694-6742-40A5-AA6D-02AB738ED62C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD584694-6742-40A5-AA6D-02AB738ED62C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
