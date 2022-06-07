@@ -1,17 +1,17 @@
 ﻿using System.IO.Compression;
 using NumSharp;
 
-await Mnist.DownloadAsync();
+await Mnist.InitializeAsync();
 
 Console.ReadLine();
 
-class Mnist
+static class Mnist
 {
-    const string UrlBase = "http://yann.lecun.com/exdb/mnist/";
+    private const string UrlBase = "http://yann.lecun.com/exdb/mnist/";
 
-    const int ImageSize = 784;
+    private const int ImageSize = 784;
 
-    static readonly IReadOnlyDictionary<string, string> s_keyFile = new Dictionary<string, string>
+    private static readonly Dictionary<string, string> s_keyFile = new Dictionary<string, string>
     {
         ["train_img"] = "train-images-idx3-ubyte.gz",
         ["train_label"] = "train-labels-idx1-ubyte.gz",
@@ -19,11 +19,11 @@ class Mnist
         ["test_label"] = "t10k-labels-idx1-ubyte.gz",
     };
 
-    static readonly string s_datasetDir = AppContext.BaseDirectory;
+    private static readonly string s_datasetDir = AppContext.BaseDirectory;
 
-    static readonly HttpClient s_httpClient = new HttpClient();
+    private static readonly HttpClient s_httpClient = new HttpClient();
 
-    public static async Task DownloadAsync()
+    private static async Task DownloadAsync()
     {
         foreach (var v in s_keyFile.Values)
         {
@@ -80,8 +80,31 @@ class Mnist
         return data;
     }
 
-    public void Init()
+    private static async Task<Dataset> ConvertNumSharpAsync()
     {
-
+        var dataset = new Dataset();
+        dataset.train_img = await LoadImagesAsync(s_keyFile["train_img"]);
+        dataset.train_label = await LoadLabelsAsync(s_keyFile["train_label"]);
+        dataset.test_img = await LoadImagesAsync(s_keyFile["test_img"]);
+        dataset.test_label = await LoadLabelsAsync(s_keyFile["test_label"]);
+        return dataset;
     }
+
+    public static async Task InitializeAsync()
+    {
+        await DownloadAsync();
+        var dataset = await ConvertNumSharpAsync();
+        Console.WriteLine("Creating npy files ...");
+        np.save(Path.Combine(s_datasetDir, nameof(dataset.train_img)), dataset.train_img);
+        np.save(Path.Combine(s_datasetDir, nameof(dataset.train_label)), dataset.train_label);
+        np.save(Path.Combine(s_datasetDir, nameof(dataset.test_img)), dataset.test_img);
+        np.save(Path.Combine(s_datasetDir, nameof(dataset.test_label)), dataset.test_label);
+        Console.WriteLine("Done!");
+    }
+
+    public static async Task LoadAsync(bool normalize = true, bool flatten = true, bool oneHotLabel = false)
+    {
+    }
+
+    record struct Dataset(NDArray train_img, NDArray train_label, NDArray test_img, NDArray test_label);
 }
