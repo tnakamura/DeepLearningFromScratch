@@ -84,12 +84,11 @@ public static class Mnist
 
     private static async Task<Dataset> ConvertNumSharpAsync()
     {
-        var dataset = new Dataset();
-        dataset.TrainImage = await LoadImagesAsync(s_keyFile[nameof(Dataset.TrainImage)]);
-        dataset.TrainLabel = await LoadLabelsAsync(s_keyFile[nameof(Dataset.TrainLabel)]);
-        dataset.TestImage = await LoadImagesAsync(s_keyFile[nameof(Dataset.TestImage)]);
-        dataset.TestLabel = await LoadLabelsAsync(s_keyFile[nameof(Dataset.TestLabel)]);
-        return dataset;
+        var trainImage = await LoadImagesAsync(s_keyFile[nameof(Dataset.TrainImage)]);
+        var trainLabel = await LoadLabelsAsync(s_keyFile[nameof(Dataset.TrainLabel)]);
+        var testImage = await LoadImagesAsync(s_keyFile[nameof(Dataset.TestImage)]);
+        var testLabel = await LoadLabelsAsync(s_keyFile[nameof(Dataset.TestLabel)]);
+        return new Dataset(trainImage, trainLabel, testImage, testLabel);
     }
 
     public static async Task InitializeAsync()
@@ -125,37 +124,36 @@ public static class Mnist
             await InitializeAsync();
         }
 
-        var dataset = new Dataset();
-        dataset.TrainImage = np.load(Path.Combine(s_datasetDir, nameof(Dataset.TrainImage) + ".npy"));
-        dataset.TrainLabel = np.load(Path.Combine(s_datasetDir, nameof(Dataset.TrainLabel) + ".npy"));
-        dataset.TestImage = np.load(Path.Combine(s_datasetDir, nameof(Dataset.TestImage) + ".npy"));
-        dataset.TestLabel = np.load(Path.Combine(s_datasetDir, nameof(Dataset.TestLabel) + ".npy"));
+        var trainImage = np.load(Path.Combine(s_datasetDir, nameof(Dataset.TrainImage) + ".npy"));
+        var trainLabel = np.load(Path.Combine(s_datasetDir, nameof(Dataset.TrainLabel) + ".npy"));
+        var testImage = np.load(Path.Combine(s_datasetDir, nameof(Dataset.TestImage) + ".npy"));
+        var testLabel = np.load(Path.Combine(s_datasetDir, nameof(Dataset.TestLabel) + ".npy"));
 
         if (normalize)
         {
-            dataset.TrainImage = dataset.TrainImage.astype(np.float32);
-            dataset.TrainImage /= 255.0;
-            dataset.TestImage = dataset.TestImage.astype(np.float32);
-            dataset.TestImage /= 255.0;
+            trainImage = trainImage.astype(np.float32);
+            trainImage /= 255.0;
+            testImage = testImage.astype(np.float32);
+            testImage /= 255.0;
         }
 
         if (oneHotLabel)
         {
-            dataset.TrainLabel = ChangeOneHotLabel(dataset.TrainLabel);
-            dataset.TestLabel = ChangeOneHotLabel(dataset.TestLabel);
+            trainLabel = ChangeOneHotLabel(trainLabel);
+            testLabel = ChangeOneHotLabel(testLabel);
         }
 
         if (!flatten)
         {
-            dataset.TrainImage = dataset.TrainImage.reshape(-1, 1, 28, 28);
-            dataset.TestImage = dataset.TestImage.reshape(-1, 1, 28, 28);
+            trainImage = trainImage.reshape(-1, 1, 28, 28);
+            testImage = testImage.reshape(-1, 1, 28, 28);
         }
 
-        return dataset;
+        return new Dataset(trainImage, trainLabel, testImage, testLabel);
     }
 }
 
-public record struct Dataset(
+public record Dataset(
     NDArray TrainImage,
     NDArray TrainLabel,
     NDArray TestImage,
