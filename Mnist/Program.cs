@@ -1,11 +1,14 @@
 ﻿using System.IO.Compression;
 using NumSharp;
 
-var ds = await Mnist.LoadAsync(oneHotLabel: true);
-
+var (xTrain, tTrain, xTest, tTest) = await MnistSharp.LoadAsync(flatten: true, normalize: false);
+Console.WriteLine(xTrain.Shape);
+Console.WriteLine(tTrain.Shape);
+Console.WriteLine(xTest.Shape);
+Console.WriteLine(tTest.Shape);
 Console.ReadLine();
 
-static class Mnist
+static class MnistSharp
 {
     private const string UrlBase = "http://yann.lecun.com/exdb/mnist/";
 
@@ -13,10 +16,10 @@ static class Mnist
 
     private static readonly Dictionary<string, string> s_keyFile = new Dictionary<string, string>
     {
-        ["train_img"] = "train-images-idx3-ubyte.gz",
-        ["train_label"] = "train-labels-idx1-ubyte.gz",
-        ["test_img"] = "t10k-images-idx3-ubyte.gz",
-        ["test_label"] = "t10k-labels-idx1-ubyte.gz",
+        [nameof(Dataset.TrainImage)] = "train-images-idx3-ubyte.gz",
+        [nameof(Dataset.TrainLabel)] = "train-labels-idx1-ubyte.gz",
+        [nameof(Dataset.TestImage)] = "t10k-images-idx3-ubyte.gz",
+        [nameof(Dataset.TestLabel)] = "t10k-labels-idx1-ubyte.gz",
     };
 
     private static readonly string s_datasetDir = AppContext.BaseDirectory;
@@ -87,10 +90,10 @@ static class Mnist
     private static async Task<Dataset> ConvertNumSharpAsync()
     {
         var dataset = new Dataset();
-        dataset.train_img = await LoadImagesAsync(s_keyFile["train_img"]);
-        dataset.train_label = await LoadLabelsAsync(s_keyFile["train_label"]);
-        dataset.test_img = await LoadImagesAsync(s_keyFile["test_img"]);
-        dataset.test_label = await LoadLabelsAsync(s_keyFile["test_label"]);
+        dataset.TrainImage = await LoadImagesAsync(s_keyFile[nameof(Dataset.TrainImage)]);
+        dataset.TrainLabel = await LoadLabelsAsync(s_keyFile[nameof(Dataset.TrainLabel)]);
+        dataset.TestImage = await LoadImagesAsync(s_keyFile[nameof(Dataset.TestImage)]);
+        dataset.TestLabel = await LoadLabelsAsync(s_keyFile[nameof(Dataset.TestLabel)]);
         return dataset;
     }
 
@@ -99,10 +102,10 @@ static class Mnist
         await DownloadAsync();
         var dataset = await ConvertNumSharpAsync();
         Console.WriteLine("Creating npy files ...");
-        np.save(Path.Combine(s_datasetDir, nameof(dataset.train_img)), dataset.train_img);
-        np.save(Path.Combine(s_datasetDir, nameof(dataset.train_label)), dataset.train_label);
-        np.save(Path.Combine(s_datasetDir, nameof(dataset.test_img)), dataset.test_img);
-        np.save(Path.Combine(s_datasetDir, nameof(dataset.test_label)), dataset.test_label);
+        np.save(Path.Combine(s_datasetDir, nameof(dataset.TrainImage)), dataset.TrainImage);
+        np.save(Path.Combine(s_datasetDir, nameof(dataset.TrainLabel)), dataset.TrainLabel);
+        np.save(Path.Combine(s_datasetDir, nameof(dataset.TestImage)), dataset.TestImage);
+        np.save(Path.Combine(s_datasetDir, nameof(dataset.TestLabel)), dataset.TestLabel);
         Console.WriteLine("Done!");
     }
 
@@ -119,42 +122,42 @@ static class Mnist
 
     public static async Task<Dataset> LoadAsync(bool normalize = true, bool flatten = true, bool oneHotLabel = false)
     {
-        if (!File.Exists(Path.Combine(s_datasetDir, nameof(Dataset.train_img) + ".npy")) ||
-            !File.Exists(Path.Combine(s_datasetDir, nameof(Dataset.train_label) + ".npy")) ||
-            !File.Exists(Path.Combine(s_datasetDir, nameof(Dataset.test_img) + ".npy")) ||
-            !File.Exists(Path.Combine(s_datasetDir, nameof(Dataset.test_label) + ".npy")))
+        if (!File.Exists(Path.Combine(s_datasetDir, nameof(Dataset.TrainImage) + ".npy")) ||
+            !File.Exists(Path.Combine(s_datasetDir, nameof(Dataset.TrainLabel) + ".npy")) ||
+            !File.Exists(Path.Combine(s_datasetDir, nameof(Dataset.TestImage) + ".npy")) ||
+            !File.Exists(Path.Combine(s_datasetDir, nameof(Dataset.TestLabel) + ".npy")))
         {
             await InitializeAsync();
         }
 
         var dataset = new Dataset();
-        dataset.train_img = np.load(Path.Combine(s_datasetDir, nameof(Dataset.train_img) + ".npy"));
-        dataset.train_label = np.load(Path.Combine(s_datasetDir, nameof(Dataset.train_label) + ".npy"));
-        dataset.test_img = np.load(Path.Combine(s_datasetDir, nameof(Dataset.test_img) + ".npy"));
-        dataset.test_label = np.load(Path.Combine(s_datasetDir, nameof(Dataset.test_label) + ".npy"));
+        dataset.TrainImage = np.load(Path.Combine(s_datasetDir, nameof(Dataset.TrainImage) + ".npy"));
+        dataset.TrainLabel = np.load(Path.Combine(s_datasetDir, nameof(Dataset.TrainLabel) + ".npy"));
+        dataset.TestImage = np.load(Path.Combine(s_datasetDir, nameof(Dataset.TestImage) + ".npy"));
+        dataset.TestLabel = np.load(Path.Combine(s_datasetDir, nameof(Dataset.TestLabel) + ".npy"));
 
         if (normalize)
         {
-            dataset.train_img = dataset.train_img.astype(np.float32);
-            dataset.train_img /= 255.0;
-            dataset.test_img = dataset.test_img.astype(np.float32);
-            dataset.test_img /= 255.0;
+            dataset.TrainImage = dataset.TrainImage.astype(np.float32);
+            dataset.TrainImage /= 255.0;
+            dataset.TestImage = dataset.TestImage.astype(np.float32);
+            dataset.TestImage /= 255.0;
         }
 
         if (oneHotLabel)
         {
-            dataset.train_label = ChangeOneHotLabel(dataset.train_label);
-            dataset.test_label = ChangeOneHotLabel(dataset.test_label);
+            dataset.TrainLabel = ChangeOneHotLabel(dataset.TrainLabel);
+            dataset.TestLabel = ChangeOneHotLabel(dataset.TestLabel);
         }
 
         if (!flatten)
         {
-            dataset.train_img = dataset.train_img.reshape(-1, 1, 28, 28);
-            dataset.test_img = dataset.test_img.reshape(-1, 1, 28, 28);
+            dataset.TrainImage = dataset.TrainImage.reshape(-1, 1, 28, 28);
+            dataset.TestImage = dataset.TestImage.reshape(-1, 1, 28, 28);
         }
 
         return dataset;
     }
 }
-record struct Dataset(NDArray train_img, NDArray train_label, NDArray test_img, NDArray test_label);
+record struct Dataset(NDArray TrainImage, NDArray TrainLabel, NDArray TestImage, NDArray TestLabel);
 
