@@ -1,7 +1,7 @@
 ﻿using System.IO.Compression;
 using NumSharp;
 
-await Mnist.InitializeAsync();
+var ds = await Mnist.LoadAsync(oneHotLabel: true);
 
 Console.ReadLine();
 
@@ -106,9 +106,14 @@ static class Mnist
         Console.WriteLine("Done!");
     }
 
-    private static NDArray ChangeOneHotlabel(NDArray x)
+    private static NDArray ChangeOneHotLabel(NDArray x)
     {
         var t = np.zeros(x.size, 10);
+        for (var idx = 0; idx < x.size; idx++)
+        {
+            var row = t[idx];
+            row[x[idx]] = 1;
+        }
         return t;
     }
 
@@ -138,8 +143,8 @@ static class Mnist
 
         if (oneHotLabel)
         {
-            dataset.train_label = ChangeOneHotlabel(dataset.train_label);
-            dataset.test_label = ChangeOneHotlabel(dataset.test_label);
+            dataset.train_label = ChangeOneHotLabel(dataset.train_label);
+            dataset.test_label = ChangeOneHotLabel(dataset.test_label);
         }
 
         if (!flatten)
