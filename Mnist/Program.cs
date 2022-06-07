@@ -106,9 +106,50 @@ static class Mnist
         Console.WriteLine("Done!");
     }
 
-    public static async Task LoadAsync(bool normalize = true, bool flatten = true, bool oneHotLabel = false)
+    private static NDArray ChangeOneHotlabel(NDArray x)
     {
+        var t = np.zeros(x.size, 10);
+        return t;
     }
 
-    record struct Dataset(NDArray train_img, NDArray train_label, NDArray test_img, NDArray test_label);
+    public static async Task<Dataset> LoadAsync(bool normalize = true, bool flatten = true, bool oneHotLabel = false)
+    {
+        if (!File.Exists(Path.Combine(s_datasetDir, nameof(Dataset.train_img) + ".npy")) ||
+            !File.Exists(Path.Combine(s_datasetDir, nameof(Dataset.train_label) + ".npy")) ||
+            !File.Exists(Path.Combine(s_datasetDir, nameof(Dataset.test_img) + ".npy")) ||
+            !File.Exists(Path.Combine(s_datasetDir, nameof(Dataset.test_label) + ".npy")))
+        {
+            await InitializeAsync();
+        }
+
+        var dataset = new Dataset();
+        dataset.train_img = np.load(Path.Combine(s_datasetDir, nameof(Dataset.train_img) + ".npy"));
+        dataset.train_label = np.load(Path.Combine(s_datasetDir, nameof(Dataset.train_label) + ".npy"));
+        dataset.test_img = np.load(Path.Combine(s_datasetDir, nameof(Dataset.test_img) + ".npy"));
+        dataset.test_label = np.load(Path.Combine(s_datasetDir, nameof(Dataset.test_label) + ".npy"));
+
+        if (normalize)
+        {
+            dataset.train_img = dataset.train_img.astype(np.float32);
+            dataset.train_img /= 255.0;
+            dataset.test_img = dataset.test_img.astype(np.float32);
+            dataset.test_img /= 255.0;
+        }
+
+        if (oneHotLabel)
+        {
+            dataset.train_label = ChangeOneHotlabel(dataset.train_label);
+            dataset.test_label = ChangeOneHotlabel(dataset.test_label);
+        }
+
+        if (!flatten)
+        {
+            dataset.train_img = dataset.train_img.reshape(-1, 1, 28, 28);
+            dataset.test_img = dataset.test_img.reshape(-1, 1, 28, 28);
+        }
+
+        return dataset;
+    }
 }
+record struct Dataset(NDArray train_img, NDArray train_label, NDArray test_img, NDArray test_label);
+
