@@ -106,11 +106,14 @@ public static class Mnist
     private static NDArray ChangeOneHotLabel(NDArray x)
     {
         var t = np.zeros(x.size, 10);
-        for (var idx = 0; idx < x.size; idx++)
+        var i = 0;
+        foreach (var n in x)
         {
-            var row = t[idx];
-            row[x[idx]] = 1;
+            var j = Convert.ToInt32(n);
+            t[i, j] = 1;
+            i++;
         }
+        Console.WriteLine(t.ToString());
         return t;
     }
 
