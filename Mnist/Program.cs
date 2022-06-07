@@ -54,10 +54,12 @@ static class Mnist
         Console.WriteLine("Converting " + fileName + " to NumSharp Array ...");
 
         using var f = File.OpenRead(filePath);
-        using var gzip = new GZipStream(f, CompressionLevel.Fastest);
-        var buffer = new byte[f.Length - 8];
-        await gzip.ReadAsync(buffer, 8, buffer.Length);
-        var labels = np.frombuffer(buffer.ToArray(), np.uint8);
+        using var gzip = new GZipStream(f, CompressionMode.Decompress);
+        using var memory = new MemoryStream();
+        await gzip.CopyToAsync(memory);
+
+        var buffer = memory.ToArray().AsSpan(8).ToArray();
+        var labels = np.frombuffer(buffer, np.uint8);
         Console.WriteLine("Done");
 
         return labels;
@@ -70,10 +72,12 @@ static class Mnist
         Console.WriteLine("Converting " + fileName + " to NumSharp Array ...");
 
         using var f = File.OpenRead(filePath);
-        using var gzip = new GZipStream(f, CompressionLevel.Fastest);
-        var buffer = new byte[f.Length - 8];
-        await gzip.ReadAsync(buffer, 8, buffer.Length);
-        var data = np.frombuffer(buffer.ToArray(), np.uint8);
+        using var gzip = new GZipStream(f, CompressionMode.Decompress);
+        using var memory = new MemoryStream();
+        await gzip.CopyToAsync(memory);
+
+        var buffer = memory.ToArray().AsSpan(16).ToArray();
+        var data = np.frombuffer(buffer, np.uint8);
         data = data.reshape(-1, ImageSize);
         Console.WriteLine("Done");
 
