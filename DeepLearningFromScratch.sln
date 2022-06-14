@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActivationFunctionSoftmax",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetwork", "NeuralNetwork\NeuralNetwork.csproj", "{6382EE3D-53DF-4B24-9175-19150526EA0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mnist", "Mnist\Mnist.csproj", "{FD584694-6742-40A5-AA6D-02AB738ED62C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mnist", "Mnist\Mnist.csproj", "{FD584694-6742-40A5-AA6D-02AB738ED62C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LossFunction", "LossFunction\LossFunction.csproj", "{CF49EB8E-9567-4030-85C3-F24E147E56A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{FD584694-6742-40A5-AA6D-02AB738ED62C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD584694-6742-40A5-AA6D-02AB738ED62C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD584694-6742-40A5-AA6D-02AB738ED62C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF49EB8E-9567-4030-85C3-F24E147E56A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF49EB8E-9567-4030-85C3-F24E147E56A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF49EB8E-9567-4030-85C3-F24E147E56A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF49EB8E-9567-4030-85C3-F24E147E56A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
