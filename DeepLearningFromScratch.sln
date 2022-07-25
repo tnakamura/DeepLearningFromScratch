@@ -1,17 +1,23 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32519.111
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perceptron", "Perceptron\Perceptron.csproj", "{5908559C-A5BC-415C-A125-E9EDCCC29DB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Perceptron", "ch02\Perceptron\Perceptron.csproj", "{5908559C-A5BC-415C-A125-E9EDCCC29DB0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActivationFunctionSoftmax", "ActivationFunctionSoftmax\ActivationFunctionSoftmax.csproj", "{F7ACE4E9-C9B3-4D27-ADEC-7E75240B8B2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActivationFunctionSoftmax", "ch03\ActivationFunctionSoftmax\ActivationFunctionSoftmax.csproj", "{F7ACE4E9-C9B3-4D27-ADEC-7E75240B8B2B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetwork", "NeuralNetwork\NeuralNetwork.csproj", "{6382EE3D-53DF-4B24-9175-19150526EA0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetwork", "ch03\NeuralNetwork\NeuralNetwork.csproj", "{6382EE3D-53DF-4B24-9175-19150526EA0D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mnist", "Mnist\Mnist.csproj", "{FD584694-6742-40A5-AA6D-02AB738ED62C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mnist", "ch03\Mnist\Mnist.csproj", "{FD584694-6742-40A5-AA6D-02AB738ED62C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LossFunction", "LossFunction\LossFunction.csproj", "{CF49EB8E-9567-4030-85C3-F24E147E56A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LossFunction", "ch04\LossFunction\LossFunction.csproj", "{CF49EB8E-9567-4030-85C3-F24E147E56A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ch02", "ch02", "{DD5BF963-3B3C-445D-A8AE-5FDF9B59AD6A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ch03", "ch03", "{F338B9B8-7FBE-4DDE-833C-EBB8C184C6C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ch04", "ch04", "{388EE30F-2957-4BBB-8773-2E3D25158FA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +48,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5908559C-A5BC-415C-A125-E9EDCCC29DB0} = {DD5BF963-3B3C-445D-A8AE-5FDF9B59AD6A}
+		{F7ACE4E9-C9B3-4D27-ADEC-7E75240B8B2B} = {F338B9B8-7FBE-4DDE-833C-EBB8C184C6C6}
+		{6382EE3D-53DF-4B24-9175-19150526EA0D} = {F338B9B8-7FBE-4DDE-833C-EBB8C184C6C6}
+		{FD584694-6742-40A5-AA6D-02AB738ED62C} = {F338B9B8-7FBE-4DDE-833C-EBB8C184C6C6}
+		{CF49EB8E-9567-4030-85C3-F24E147E56A9} = {388EE30F-2957-4BBB-8773-2E3D25158FA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {44F1AF85-342B-4861-83A5-DDA9EEEE11FF}
