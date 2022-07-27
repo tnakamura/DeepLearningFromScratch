@@ -93,7 +93,7 @@ class simpleNet
 
     public simpleNet()
     {
-        //W = np.random.randn(2, 3); // ガウス分布で初期化
+        // ゼロから作る Deep Learning と同じ重みパラメーターを指定する。
         W = np.array(new double[,]
         {
             { 0.47355232, 0.9977393, 0.84668094 },
