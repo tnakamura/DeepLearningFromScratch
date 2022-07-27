@@ -8,9 +8,11 @@ var y = gradient_descent(
     step_num: 100);
 Console.WriteLine(y.ToString());
 
+// f(x0, x1) = x0 ^ 2 + x1 ^ 2
 static double function_2(NDArray x) =>
     x[0] * x[0] + x[1] * x[1];
 
+// 勾配
 static NDArray numerical_gradient(
     Func<NDArray, double> f,
     NDArray x)
