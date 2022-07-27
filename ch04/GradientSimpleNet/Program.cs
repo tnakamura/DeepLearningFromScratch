@@ -1,34 +1,30 @@
-﻿using NumSharp;
-using static functions;
-using static gradient;
+﻿using Numpy;
 
 var net = new simpleNet();
-Console.WriteLine(net.W.ToString());
+Console.WriteLine(net.W); // 重みパラメータ
 
 var x = np.array(0.6, 0.9);
 var p = net.predict(x);
-Console.WriteLine("予測");
-Console.WriteLine(p.ToString());
+Console.WriteLine(p);
+Console.WriteLine(np.argmax(p)); // 最大値のインデックス
 
-var t = np.array(0, 0, 1.0);
+var t = np.array(0, 0, 1.0); // 正解ラベル
 var loss = net.loss(x, t);
-Console.WriteLine("損失関数の値");
-Console.WriteLine(loss.ToString());
+Console.WriteLine(loss);
 
-Func<NDArray, double> f = W => net.loss(x, t);
-var dW = numerical_gradient_2d(f, net.W);
-Console.WriteLine("勾配");
-Console.WriteLine(dW.ToString());
+Func<NDarray, NDarray> f = W => net.loss(x, t);
+var dW = gradient.numerical_gradient(f, net.W);
+Console.WriteLine(dW);
 
 static class functions
 {
-    public static NDArray softmax(NDArray x)
+    public static NDarray softmax(NDarray x)
     {
-        x = x - np.max(x, axis: -1, keepdims: true); // オーバーフロー対策
-        return np.exp(x) / np.sum(np.exp(x), axis: -1, keepdims: true, typeCode: NPTypeCode.Double);
+        x = x - np.max(x, axis: new[] { -1 }, keepdims: true); // オーバーフロー対策
+        return np.exp(x) / np.sum(np.exp(x), axis: -1, keepdims: true);
     }
 
-    public static NDArray cross_entropy_error(NDArray y, NDArray t)
+    public static NDarray cross_entropy_error(NDarray y, NDarray t)
     {
         if (y.ndim == 1)
         {
@@ -43,20 +39,20 @@ static class functions
         }
 
         var batch_size = y.shape[0];
-        return (-1) * np.sum(np.log(y[np.arange(batch_size), t] + 1e-7), NPTypeCode.Double) / batch_size;
+        return (-1) * np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size;
     }
 }
 
 static class gradient
 {
-    static NDArray numerical_gradient_1d(Func<NDArray, double> f, NDArray x)
+    static NDarray numerical_gradient_1d(Func<NDarray, NDarray> f, NDarray x)
     {
         var h = 1e-4; // 0.0001
         var grad = np.zeros_like(x);
 
-        foreach (var idx in Enumerable.Range(0, x.size))
+        for (var idx = 0; idx < x.size; idx++)
         {
-            var tmp_val = (double)x[idx];
+            var tmp_val = x[idx];
             x[idx] = tmp_val + h;
             var fxh1 = f(x); // f(x+h)
 
@@ -70,7 +66,7 @@ static class gradient
         return grad;
     }
 
-    public static NDArray numerical_gradient_2d(Func<NDArray, double> f, NDArray X)
+    public static NDarray numerical_gradient(Func<NDarray, NDarray> f, NDarray X)
     {
         if (X.ndim == 1)
         {
@@ -80,7 +76,7 @@ static class gradient
         {
             var grad = np.zeros_like(X);
 
-            for (var idx = 0; idx < X.size; idx++)
+            for (var idx = 0; idx < X.len; idx++)
             {
                 var x = X[idx];
                 grad[idx] = numerical_gradient_1d(f, x);
@@ -93,7 +89,7 @@ static class gradient
 
 class simpleNet
 {
-    public NDArray W { get; }
+    public NDarray W { get; }
 
     public simpleNet()
     {
@@ -105,16 +101,16 @@ class simpleNet
         });
     }
 
-    public NDArray predict(NDArray x)
+    public NDarray predict(NDarray x)
     {
         return np.dot(x, W);
     }
 
-    public NDArray loss(NDArray x, NDArray t)
+    public NDarray loss(NDarray x, NDarray t)
     {
         var z = predict(x);
-        var y = softmax(z);
-        var loss = cross_entropy_error(y, t);
+        var y = functions.softmax(z);
+        var loss = functions.cross_entropy_error(y, t);
         return loss;
     }
 }
