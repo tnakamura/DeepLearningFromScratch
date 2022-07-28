@@ -1,72 +1,66 @@
-﻿using Numpy;
+﻿using NumSharp;
 
 var net = new simpleNet();
-Console.WriteLine(net.W); // 重みパラメータ
+Console.WriteLine(net.W.ToString()); // 重みパラメータ
 
 var x = np.array(0.6, 0.9);
 var p = net.predict(x);
-Console.WriteLine(p);
+Console.WriteLine(p.ToString());
 Console.WriteLine(np.argmax(p)); // 最大値のインデックス
 
 var t = np.array(0, 0, 1.0); // 正解ラベル
 var loss = net.loss(x, t);
-Console.WriteLine(loss);
+Console.WriteLine(loss.ToString());
 
-Func<NDarray, NDarray> f = W => net.loss(x, t);
+Func<NDArray, NDArray> f = W => net.loss(x, t);
 var dW = gradient.numerical_gradient(f, net.W);
-Console.WriteLine(dW);
+Console.WriteLine(dW.ToString());
 
 static class functions
 {
-    public static NDarray softmax(NDarray x)
+    public static NDArray softmax(NDArray x)
     {
-        x = x - np.max(x, axis: new[] { -1 }, keepdims: true); // オーバーフロー対策
-        return np.exp(x) / np.sum(np.exp(x), axis: -1, keepdims: true);
+        var c = np.max(x);
+        var exp_x = np.exp(x - c);
+        var sum_exp_x = np.sum(exp_x, NPTypeCode.Double);
+        var y = exp_x / sum_exp_x;
+        return y;
     }
 
-    public static NDarray cross_entropy_error(NDarray y, NDarray t)
+    public static NDArray cross_entropy_error(NDArray y, NDArray t)
     {
-        if (y.ndim == 1)
-        {
-            t = t.reshape(1, t.size);
-            y = y.reshape(1, y.size);
-        }
-
-        // 教師データが one-hot-vector の場合、正解ラベルのインデックスに変換
-        if (t.size == y.size)
-        {
-            t = t.argmax(1);
-        }
-
-        var batch_size = y.shape[0];
-        return (-1) * np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size;
+        var delta = 1e-7;
+        return (-1) * np.sum(t * np.log(y + delta), NPTypeCode.Double);
     }
 }
 
 static class gradient
 {
-    static NDarray numerical_gradient_1d(Func<NDarray, NDarray> f, NDarray x)
+    static NDArray numerical_gradient_1d(Func<NDArray, NDArray> f, NDArray x)
     {
         var h = 1e-4; // 0.0001
-        var grad = np.zeros_like(x);
+        var grad = np.zeros_like(x); // x と同じ形状の配列を生成
 
-        for (var idx = 0; idx < x.size; idx++)
+        foreach (var idx in Enumerable.Range(0, x.size))
         {
-            var tmp_val = x[idx];
+            var tmp_val = (double)x[idx];
+
+            // f(x + h) の計算
             x[idx] = tmp_val + h;
-            var fxh1 = f(x); // f(x+h)
+            var fxh1 = f(x);
 
+            // f(x - h) の計算
             x[idx] = tmp_val - h;
-            var fxh2 = f(x); // f(x-h)
-            grad[idx] = (fxh1 - fxh2) / (2 * h);
+            var fxh2 = f(x);
 
+            grad[idx] = (fxh1 - fxh2) / (2 * h);
             x[idx] = tmp_val; // 値を元に戻す
         }
 
         return grad;
     }
 
-    public static NDarray numerical_gradient(Func<NDarray, NDarray> f, NDarray X)
+    public static NDArray numerical_gradient(Func<NDArray, NDArray> f, NDArray X)
     {
         if (X.ndim == 1)
         {
@@ -76,7 +70,7 @@ static class gradient
         {
             var grad = np.zeros_like(X);
 
-            for (var idx = 0; idx < X.len; idx++)
+            for (var idx = 0; idx < X.ndim; idx++)
             {
                 var x = X[idx];
                 grad[idx] = numerical_gradient_1d(f, x);
@@ -89,7 +83,7 @@ static class gradient
 
 class simpleNet
 {
-    public NDarray W { get; }
+    public NDArray W { get; }
 
     public simpleNet()
     {
@@ -101,12 +95,17 @@ class simpleNet
         });
     }
 
-    public NDarray predict(NDarray x)
+    public NDArray predict(NDArray x)
     {
-        return np.dot(x, W);
+        // NumSharp が 1-D と 2-D の内積をサポートしていなかったので、
+        // x を 2-D に変換して計算したあと、1-D に戻して回避。
+        // 汎用的な手法ではない。
+        x = x.reshape_unsafe(2, 2);
+        var y = np.dot(x, W);
+        return y.reshape_unsafe(3);
     }
 
-    public NDarray loss(NDarray x, NDarray t)
+    public NDArray loss(NDArray x, NDArray t)
     {
         var z = predict(x);
         var y = functions.softmax(z);

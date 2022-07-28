@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Numpy" Version="3.10.1.29" />
+    <PackageReference Include="NumSharp" Version="0.30.0" />
   </ItemGroup>
 
 </Project>
