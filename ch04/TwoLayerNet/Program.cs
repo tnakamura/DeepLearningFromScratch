@@ -1,5 +1,4 @@
 ﻿using NumSharp;
-using static functions;
 
 var net = new TwoLayerNet(input_size: 784, hidden_size: 100, output_size: 10);
 Console.WriteLine(net.W1.Shape);
@@ -24,7 +23,6 @@ Console.WriteLine(net.b2.Shape);
     Console.WriteLine(grads.W2.Shape);
     Console.WriteLine(grads.b2.Shape);
 }
-
 
 Console.ReadLine();
 
@@ -53,16 +51,16 @@ public class TwoLayerNet
     public NDArray predict(NDArray x)
     {
         var a1 = np.dot(x, W1) + b1;
-        var z1 = sigmoid(a1);
+        var z1 = functions.sigmoid(a1);
         var a2 = np.dot(z1, W2) + b2;
-        var y = softmax(a2);
+        var y = functions.softmax(a2);
         return y;
     }
 
     public NDArray loss(NDArray x, NDArray t)
     {
         var y = predict(x);
-        return cross_entropy_error(y, t);
+        return functions.cross_entropy_error(y, t);
     }
 
     public NDArray accuracy(NDArray x, NDArray t)
