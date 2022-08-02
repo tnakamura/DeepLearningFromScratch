@@ -22,7 +22,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NumericalGradient", "ch04\N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GradientDescent", "ch04\GradientDescent\GradientDescent.csproj", "{6BC5AA42-80FC-4DA0-BA56-029AD58BB112}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GradientSimpleNet", "ch04\GradientSimpleNet\GradientSimpleNet.csproj", "{DB1CF6A5-4729-46DE-89E1-57F5E0662C04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GradientSimpleNet", "ch04\GradientSimpleNet\GradientSimpleNet.csproj", "{DB1CF6A5-4729-46DE-89E1-57F5E0662C04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoLayerNet", "ch04\TwoLayerNet\TwoLayerNet.csproj", "{5CE4F604-A20A-4632-B620-D4B5D4314ADD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +64,10 @@ Global
 		{DB1CF6A5-4729-46DE-89E1-57F5E0662C04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB1CF6A5-4729-46DE-89E1-57F5E0662C04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB1CF6A5-4729-46DE-89E1-57F5E0662C04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CE4F604-A20A-4632-B620-D4B5D4314ADD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CE4F604-A20A-4632-B620-D4B5D4314ADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CE4F604-A20A-4632-B620-D4B5D4314ADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CE4F604-A20A-4632-B620-D4B5D4314ADD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +81,7 @@ Global
 		{44D134FB-2D07-47E0-97E7-B292B389BF72} = {388EE30F-2957-4BBB-8773-2E3D25158FA1}
 		{6BC5AA42-80FC-4DA0-BA56-029AD58BB112} = {388EE30F-2957-4BBB-8773-2E3D25158FA1}
 		{DB1CF6A5-4729-46DE-89E1-57F5E0662C04} = {388EE30F-2957-4BBB-8773-2E3D25158FA1}
+		{5CE4F604-A20A-4632-B620-D4B5D4314ADD} = {388EE30F-2957-4BBB-8773-2E3D25158FA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {44F1AF85-342B-4861-83A5-DDA9EEEE11FF}
