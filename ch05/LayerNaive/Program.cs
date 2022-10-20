@@ -1,6 +1,8 @@
-﻿var apple = 100m;
-var apple_num = 2m;
-var tax = 1.1m;
+﻿using NumSharp;
+
+NDArray apple = 100;
+NDArray apple_num = 2;
+NDArray tax = 1.1;
 
 var mul_apple_layer = new MulLayer();
 var mul_tax_layer = new MulLayer();
@@ -8,20 +10,20 @@ var mul_tax_layer = new MulLayer();
 // forward
 var apple_price = mul_apple_layer.forward(apple, apple_num);
 var price = mul_tax_layer.forward(apple_price, tax);
-Console.WriteLine(price);
+Console.WriteLine(price.ToString());
 
 // backward
-var dprice = 1m;
+NDArray dprice = 1;
 var (dapple_price, dtax) = mul_tax_layer.backward(dprice);
 var (dapple, dapple_num) = mul_apple_layer.backward(dapple_price);
 Console.WriteLine($"{dapple} {dapple_num} {dtax}");
 
 class MulLayer
 {
-    decimal x;
-    decimal y;
+    NDArray? x;
+    NDArray? y;
 
-    public decimal forward(decimal x, decimal y)
+    public NDArray forward(NDArray x, NDArray y)
     {
         this.x = x;
         this.y = y;
@@ -29,7 +31,7 @@ class MulLayer
         return @out;
     }
 
-    public (decimal dx, decimal dy) backward(decimal dout)
+    public (NDArray dx, NDArray dy) backward(NDArray dout)
     {
         var dx = dout * this.y;
         var dy = dout * this.x;
