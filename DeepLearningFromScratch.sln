@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayerNaive", "ch05\LayerNai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuyApple", "ch05\BuyApple\BuyApple.csproj", "{47769E27-9F2C-44EF-A0E6-BF7FDE349FC6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuyAppleOrange", "ch05\BuyAppleOrange\BuyAppleOrange.csproj", "{7571E1F8-1EF5-4773-B8D5-E15B060962D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{47769E27-9F2C-44EF-A0E6-BF7FDE349FC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47769E27-9F2C-44EF-A0E6-BF7FDE349FC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47769E27-9F2C-44EF-A0E6-BF7FDE349FC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7571E1F8-1EF5-4773-B8D5-E15B060962D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7571E1F8-1EF5-4773-B8D5-E15B060962D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7571E1F8-1EF5-4773-B8D5-E15B060962D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7571E1F8-1EF5-4773-B8D5-E15B060962D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{5CE4F604-A20A-4632-B620-D4B5D4314ADD} = {388EE30F-2957-4BBB-8773-2E3D25158FA1}
 		{CEAB9402-BA48-4CD1-8BD3-3D3B3E0E45A7} = {D85253C2-B950-41C0-ACDF-4CEAB2C8269E}
 		{47769E27-9F2C-44EF-A0E6-BF7FDE349FC6} = {D85253C2-B950-41C0-ACDF-4CEAB2C8269E}
+		{7571E1F8-1EF5-4773-B8D5-E15B060962D6} = {D85253C2-B950-41C0-ACDF-4CEAB2C8269E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {44F1AF85-342B-4861-83A5-DDA9EEEE11FF}
