@@ -5,11 +5,8 @@ var x = np.array(new double[,]
     { 1.0, -0.5 },
     { -2.0, 3.0 },
 });
-//var x = np.array(new[] { new[] { 1.0, -0.5 }, new[] { -2.0, 3.0 } });
 Console.WriteLine(x);
 
-// <= が実装されていなかったので
-// (x <= 0.0) = !(x > 0.0) で代用
 var mask = (x <= 0.0);
 Console.WriteLine(mask);
 
