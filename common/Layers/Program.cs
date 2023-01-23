@@ -37,3 +37,23 @@ public class Relu
         return dx;
     }
 }
+
+public class Sigmoid
+{
+    private NDarray? _out;
+
+    public NDarray forward(NDarray x)
+    {
+        var @out = 1 / (1 + np.exp(-x));
+        _out = @out;
+
+        return @out;
+    }
+
+    public NDarray backward(NDarray dout)
+    {
+        var dx = dout * (1.0 - _out) * _out;
+
+        return dx;
+    }
+}
