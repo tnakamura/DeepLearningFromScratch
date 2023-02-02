@@ -86,6 +86,48 @@ public class Affine
     }
 }
 
+public class SoftmaxWithLoss
+{
+    /// <summary>損失</summary>
+    public NDarray? loss { get; private set; }
+
+    /// <summary>softmaxの出力</summary>
+    public NDarray? y { get; private set; }
+
+    /// <summary>教師データ(one-hot vector)</summary>
+    public NDarray? t { get; private set; }
+
+    public NDarray forward(NDarray x, NDarray t)
+    {
+        this.t = t;
+        this.y = softmax(x);
+        this.loss = cross_entropy_error(this.y, this.t);
+        return this.loss;
+    }
+
+    public NDarray backward(NDarray dout)
+    {
+        var batch_size = this.t!.shape[0];
+        var dx = (this.y - this.t) / batch_size;
+        return dx;
+    }
+
+    private static NDarray softmax(NDarray a)
+    {
+        var c = np.max(a);
+        var exp_a = np.exp(a - c);
+        var sum_exp_a = np.sum(exp_a);
+        var y = exp_a / sum_exp_a;
+        return y;
+    }
+
+    private static NDarray cross_entropy_error(NDarray y, NDarray t)
+    {
+        var delta = 1e-7;
+        return (-1) * np.sum(t * np.log(y + delta));
+    }
+}
+
 public class Sigmoid
 {
     private NDarray? _out;
